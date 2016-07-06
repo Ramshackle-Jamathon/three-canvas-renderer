@@ -15,6 +15,6 @@
   },
   "homepage": "https://github.com/socialtables/render-engine",
   "peerDependencies": {
-    "three": "^0.76.0"
+    "three": ">=0.76.0"
   }
 }
