@@ -1,5 +1,5 @@
 # three-canvas-renderer
-Three.js with canvasRenderer included
+Three.js with [CanvasRenderer](http://threejs.org/docs/index.html#Reference/Renderers/CanvasRenderer) included
 
 
 ## use it
