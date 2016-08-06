@@ -1,6 +1,6 @@
 {
   "name": "three-canvas-renderer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "three.js module with canvasRenderer included",
   "author": "Joseph Van Drunen <josephvandrunen@gmail.com>",
   "main": "./index.js",
