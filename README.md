@@ -1,8 +1,13 @@
 # three-canvas-renderer
-Three.js with [CanvasRenderer](http://threejs.org/docs/index.html#Reference/Renderers/CanvasRenderer) included
+bundles [CanvasRenderer](http://threejs.org/docs/index.html#Reference/Renderers/CanvasRenderer) into Three.js
 
+## Installation
 
-## use it
+```
+$ npm install three-canvas-renderer
+```
+
+## Example
 _works with THREE >=0.76.0_
 
 ```javascript
@@ -12,3 +17,8 @@ import THREE from "three-canvas-renderer";
 //ES5
 var THREE = require("three-canvas-renderer");
 ```
+
+## Badges
+
+![](https://img.shields.io/badge/license-MIT-blue.svg)
+![](https://img.shields.io/badge/status-stable-green.svg)

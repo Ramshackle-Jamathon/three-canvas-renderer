@@ -2,13 +2,18 @@
   "name": "three-canvas-renderer",
   "version": "1.0.0",
   "description": "three.js module with canvasRenderer included",
+  "author": "Joseph Van Drunen <josephvandrunen@gmail.com>",
   "main": "./index.js",
+  "keywords": [
+    "three.js",
+    "canvasRenderer"
+  ],
+  "license": "MIT",
   "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/Ramshackle-Jamathon/three-canvas-renderer.git"
   },
-  "author": "Ramshackle-Jamathon",
   "bugs": {
     "url": "https://github.com/Ramshackle-Jamathon/three-canvas-renderer/issues"
   },
