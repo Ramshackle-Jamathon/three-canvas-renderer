@@ -11,11 +11,10 @@ $ npm install three-canvas-renderer
 _works with THREE >=0.76.0_
 
 ```javascript
-//ES6
-import THREE from "three-canvas-renderer";
-
-//ES5
 var THREE = require("three-canvas-renderer");
+
+this.renderer = new THREE.CanvasRenderer(); // yay! you don't have to mess with the Three.js examples/ directory	
+
 ```
 
 ## Badges
