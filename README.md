@@ -1,5 +1,5 @@
 # three-canvas-renderer
-bundles [CanvasRenderer](http://threejs.org/docs/index.html#Reference/Renderers/CanvasRenderer) into Three.js
+bundles [CanvasRenderer](https://threejs.org/docs/#Examples/Renderers/CanvasRenderer) into Three.js
 
 ## Installation
 
