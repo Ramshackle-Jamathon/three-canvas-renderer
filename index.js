@@ -1,4 +1,41 @@
-var THREE = require("three");
+import {
+	Vector4,
+	Vector3,
+	Vector2,
+	Color,
+	Box3,
+	Box2,
+	Matrix4,
+	Matrix3,
+	Frustum,
+	DoubleSide,
+	Light,
+	Line,
+	Sprite,
+	Mesh,
+	BufferGeometry,
+	Geometry,
+	BackSide,
+	FrontSide,
+	VertexColors,
+	REVISION,
+	NormalBlending,
+	Camera,
+	MultiMaterial,
+	Material,
+	AmbientLight,
+	DirectionalLight,
+	PointLight,
+	FaceColors,
+	UVMapping,
+	SphericalReflectionMapping,
+	CompressedTexture,
+	DataTexture,
+	RepeatWrapping,
+	AdditiveBlending,
+	SubtractiveBlending,
+	MultiplyBlending
+} from "three";
 
 /**
  * @author mrdoob / http://mrdoob.com/
@@ -7,7 +44,7 @@ var THREE = require("three");
  * @author Ramshackle-Jamathon / https://github.com/Ramshackle-Jamathon
  */
 
-THREE.RenderableObject = function () {
+function RenderableObject() {
 
 	this.id = 0;
 
@@ -19,22 +56,22 @@ THREE.RenderableObject = function () {
 
 //
 
-THREE.RenderableFace = function () {
+function RenderableFace() {
 
 	this.id = 0;
 
-	this.v1 = new THREE.RenderableVertex();
-	this.v2 = new THREE.RenderableVertex();
-	this.v3 = new THREE.RenderableVertex();
+	this.v1 = new RenderableVertex();
+	this.v2 = new RenderableVertex();
+	this.v3 = new RenderableVertex();
 
-	this.normalModel = new THREE.Vector3();
+	this.normalModel = new Vector3();
 
-	this.vertexNormalsModel = [ new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3() ];
+	this.vertexNormalsModel = [ new Vector3(), new Vector3(), new Vector3() ];
 	this.vertexNormalsLength = 0;
 
-	this.color = new THREE.Color();
+	this.color = new Color();
 	this.material = null;
-	this.uvs = [ new THREE.Vector2(), new THREE.Vector2(), new THREE.Vector2() ];
+	this.uvs = [ new Vector2(), new Vector2(), new Vector2() ];
 
 	this.z = 0;
 	this.renderOrder = 0;
@@ -43,17 +80,17 @@ THREE.RenderableFace = function () {
 
 //
 
-THREE.RenderableVertex = function () {
+function RenderableVertex() {
 
-	this.position = new THREE.Vector3();
-	this.positionWorld = new THREE.Vector3();
-	this.positionScreen = new THREE.Vector4();
+	this.position = new Vector3();
+	this.positionWorld = new Vector3();
+	this.positionScreen = new Vector4();
 
 	this.visible = true;
 
 };
 
-THREE.RenderableVertex.prototype.copy = function ( vertex ) {
+RenderableVertex.prototype.copy = function ( vertex ) {
 
 	this.positionWorld.copy( vertex.positionWorld );
 	this.positionScreen.copy( vertex.positionScreen );
@@ -62,14 +99,14 @@ THREE.RenderableVertex.prototype.copy = function ( vertex ) {
 
 //
 
-THREE.RenderableLine = function () {
+function RenderableLine() {
 
 	this.id = 0;
 
-	this.v1 = new THREE.RenderableVertex();
-	this.v2 = new THREE.RenderableVertex();
+	this.v1 = new RenderableVertex();
+	this.v2 = new RenderableVertex();
 
-	this.vertexColors = [ new THREE.Color(), new THREE.Color() ];
+	this.vertexColors = [ new Color(), new Color() ];
 	this.material = null;
 
 	this.z = 0;
@@ -79,7 +116,7 @@ THREE.RenderableLine = function () {
 
 //
 
-THREE.RenderableSprite = function () {
+function RenderableSprite() {
 
 	this.id = 0;
 
@@ -90,7 +127,7 @@ THREE.RenderableSprite = function () {
 	this.z = 0;
 
 	this.rotation = 0;
-	this.scale = new THREE.Vector2();
+	this.scale = new Vector2();
 
 	this.material = null;
 	this.renderOrder = 0;
@@ -99,7 +136,7 @@ THREE.RenderableSprite = function () {
 
 //
 
-THREE.Projector = function () {
+function Projector() {
 
 	var _object, _objectCount, _objectPool = [], _objectPoolLength = 0,
 	_vertex, _vertexCount, _vertexPool = [], _vertexPoolLength = 0,
@@ -109,46 +146,46 @@ THREE.Projector = function () {
 
 	_renderData = { objects: [], lights: [], elements: [] },
 
-	_vector3 = new THREE.Vector3(),
-	_vector4 = new THREE.Vector4(),
+	_vector3 = new Vector3(),
+	_vector4 = new Vector4(),
 
-	_clipBox = new THREE.Box3( new THREE.Vector3( - 1, - 1, - 1 ), new THREE.Vector3( 1, 1, 1 ) ),
-	_boundingBox = new THREE.Box3(),
+	_clipBox = new Box3( new Vector3( - 1, - 1, - 1 ), new Vector3( 1, 1, 1 ) ),
+	_boundingBox = new Box3(),
 	_points3 = new Array( 3 ),
 	_points4 = new Array( 4 ),
 
-	_viewMatrix = new THREE.Matrix4(),
-	_viewProjectionMatrix = new THREE.Matrix4(),
+	_viewMatrix = new Matrix4(),
+	_viewProjectionMatrix = new Matrix4(),
 
 	_modelMatrix,
-	_modelViewProjectionMatrix = new THREE.Matrix4(),
+	_modelViewProjectionMatrix = new Matrix4(),
 
-	_normalMatrix = new THREE.Matrix3(),
+	_normalMatrix = new Matrix3(),
 
-	_frustum = new THREE.Frustum(),
+	_frustum = new Frustum(),
 
-	_clippedVertex1PositionScreen = new THREE.Vector4(),
-	_clippedVertex2PositionScreen = new THREE.Vector4();
+	_clippedVertex1PositionScreen = new Vector4(),
+	_clippedVertex2PositionScreen = new Vector4();
 
 	//
 
 	this.projectVector = function ( vector, camera ) {
 
-		console.warn( 'THREE.Projector: .projectVector() is now vector.project().' );
+		console.warn( 'Projector: .projectVector() is now vector.project().' );
 		vector.project( camera );
 
 	};
 
 	this.unprojectVector = function ( vector, camera ) {
 
-		console.warn( 'THREE.Projector: .unprojectVector() is now vector.unproject().' );
+		console.warn( 'Projector: .unprojectVector() is now vector.unproject().' );
 		vector.unproject( camera );
 
 	};
 
 	this.pickingRay = function ( vector, camera ) {
 
-		console.error( 'THREE.Projector: .pickingRay() is now raycaster.setFromCamera().' );
+		console.error( 'Projector: .pickingRay() is now raycaster.setFromCamera().' );
 
 	};
 
@@ -162,7 +199,7 @@ THREE.Projector = function () {
 		var object = null;
 		var material = null;
 
-		var normalMatrix = new THREE.Matrix3();
+		var normalMatrix = new Matrix3();
 
 		function setObject( value ) {
 
@@ -266,7 +303,7 @@ THREE.Projector = function () {
 
 			if ( checkTriangleVisibility( v1, v2, v3 ) === false ) return;
 
-			if ( material.side === THREE.DoubleSide || checkBackfaceCulling( v1, v2, v3 ) === true ) {
+			if ( material.side === DoubleSide || checkBackfaceCulling( v1, v2, v3 ) === true ) {
 
 				_face = getNextFaceInPool();
 
@@ -359,18 +396,18 @@ THREE.Projector = function () {
 
 		scene.traverseVisible( function ( object ) {
 
-			if ( object instanceof THREE.Light ) {
+			if ( object instanceof Light ) {
 
 				_renderData.lights.push( object );
 
-			} else if ( object instanceof THREE.Mesh || object instanceof THREE.Line ) {
+			} else if ( object instanceof Mesh || object instanceof Line ) {
 
 				if ( object.material.visible === false ) return;
 				if ( object.frustumCulled === true && _frustum.intersectsObject( object ) === false ) return;
 
 				addObject( object );
 
-			} else if ( object instanceof THREE.Sprite ) {
+			} else if ( object instanceof Sprite ) {
 
 				if ( object.material.visible === false ) return;
 				if ( object.frustumCulled === true && _frustum.intersectsSprite( object ) === false ) return;
@@ -400,9 +437,9 @@ THREE.Projector = function () {
 
 			_vertexCount = 0;
 
-			if ( object instanceof THREE.Mesh ) {
+			if ( object instanceof Mesh ) {
 
-				if ( geometry instanceof THREE.BufferGeometry ) {
+				if ( geometry instanceof BufferGeometry ) {
 
 					var attributes = geometry.attributes;
 					var groups = geometry.groups;
@@ -479,7 +516,7 @@ THREE.Projector = function () {
 
 					}
 
-				} else if ( geometry instanceof THREE.Geometry ) {
+				} else if ( geometry instanceof Geometry ) {
 
 					var vertices = geometry.vertices;
 					var faces = geometry.faces;
@@ -489,7 +526,7 @@ THREE.Projector = function () {
 
 					var material = object.material;
 
-					var isFaceMaterial = material instanceof THREE.MultiMaterial;
+					var isFaceMaterial = material instanceof MultiMaterial;
 					var objectMaterials = isFaceMaterial === true ? object.material : null;
 
 					for ( var v = 0, vl = vertices.length; v < vl; v ++ ) {
@@ -544,10 +581,10 @@ THREE.Projector = function () {
 
 						var visible = renderList.checkBackfaceCulling( v1, v2, v3 );
 
-						if ( side !== THREE.DoubleSide ) {
+						if ( side !== DoubleSide ) {
 
-							if ( side === THREE.FrontSide && visible === false ) continue;
-							if ( side === THREE.BackSide && visible === true ) continue;
+							if ( side === FrontSide && visible === false ) continue;
+							if ( side === BackSide && visible === true ) continue;
 
 						}
 
@@ -560,7 +597,7 @@ THREE.Projector = function () {
 
 						_face.normalModel.copy( face.normal );
 
-						if ( visible === false && ( side === THREE.BackSide || side === THREE.DoubleSide ) ) {
+						if ( visible === false && ( side === BackSide || side === DoubleSide ) ) {
 
 							_face.normalModel.negate();
 
@@ -575,7 +612,7 @@ THREE.Projector = function () {
 							var normalModel = _face.vertexNormalsModel[ n ];
 							normalModel.copy( faceVertexNormals[ n ] );
 
-							if ( visible === false && ( side === THREE.BackSide || side === THREE.DoubleSide ) ) {
+							if ( visible === false && ( side === BackSide || side === DoubleSide ) ) {
 
 								normalModel.negate();
 
@@ -611,9 +648,9 @@ THREE.Projector = function () {
 
 				}
 
-			} else if ( object instanceof THREE.Line ) {
+			} else if ( object instanceof Line ) {
 
-				if ( geometry instanceof THREE.BufferGeometry ) {
+				if ( geometry instanceof BufferGeometry ) {
 
 					var attributes = geometry.attributes;
 
@@ -639,7 +676,7 @@ THREE.Projector = function () {
 
 						} else {
 
-							var step = object instanceof THREE.LineSegments ? 2 : 1;
+							var step = object instanceof LineSegments ? 2 : 1;
 
 							for ( var i = 0, l = ( positions.length / 3 ) - 1; i < l; i += step ) {
 
@@ -651,7 +688,7 @@ THREE.Projector = function () {
 
 					}
 
-				} else if ( geometry instanceof THREE.Geometry ) {
+				} else if ( geometry instanceof Geometry ) {
 
 					_modelViewProjectionMatrix.multiplyMatrices( _viewProjectionMatrix, _modelMatrix );
 
@@ -662,7 +699,7 @@ THREE.Projector = function () {
 					v1 = getNextVertexInPool();
 					v1.positionScreen.copy( vertices[ 0 ] ).applyMatrix4( _modelViewProjectionMatrix );
 
-					var step = object instanceof THREE.LineSegments ? 2 : 1;
+					var step = object instanceof LineSegments ? 2 : 1;
 
 					for ( var v = 1, vl = vertices.length; v < vl; v ++ ) {
 
@@ -693,7 +730,7 @@ THREE.Projector = function () {
 
 							_line.material = object.material;
 
-							if ( object.material.vertexColors === THREE.VertexColors ) {
+							if ( object.material.vertexColors === VertexColors ) {
 
 								_line.vertexColors[ 0 ].copy( object.geometry.colors[ v ] );
 								_line.vertexColors[ 1 ].copy( object.geometry.colors[ v - 1 ] );
@@ -708,7 +745,7 @@ THREE.Projector = function () {
 
 				}
 
-			} else if ( object instanceof THREE.Sprite ) {
+			} else if ( object instanceof Sprite ) {
 
 				_vector4.set( _modelMatrix.elements[ 12 ], _modelMatrix.elements[ 13 ], _modelMatrix.elements[ 14 ], 1 );
 				_vector4.applyMatrix4( _viewProjectionMatrix );
@@ -758,7 +795,7 @@ THREE.Projector = function () {
 
 		if ( _objectCount === _objectPoolLength ) {
 
-			var object = new THREE.RenderableObject();
+			var object = new RenderableObject();
 			_objectPool.push( object );
 			_objectPoolLength ++;
 			_objectCount ++;
@@ -774,7 +811,7 @@ THREE.Projector = function () {
 
 		if ( _vertexCount === _vertexPoolLength ) {
 
-			var vertex = new THREE.RenderableVertex();
+			var vertex = new RenderableVertex();
 			_vertexPool.push( vertex );
 			_vertexPoolLength ++;
 			_vertexCount ++;
@@ -790,7 +827,7 @@ THREE.Projector = function () {
 
 		if ( _faceCount === _facePoolLength ) {
 
-			var face = new THREE.RenderableFace();
+			var face = new RenderableFace();
 			_facePool.push( face );
 			_facePoolLength ++;
 			_faceCount ++;
@@ -807,7 +844,7 @@ THREE.Projector = function () {
 
 		if ( _lineCount === _linePoolLength ) {
 
-			var line = new THREE.RenderableLine();
+			var line = new RenderableLine();
 			_linePool.push( line );
 			_linePoolLength ++;
 			_lineCount ++;
@@ -823,7 +860,7 @@ THREE.Projector = function () {
 
 		if ( _spriteCount === _spritePoolLength ) {
 
-			var sprite = new THREE.RenderableSprite();
+			var sprite = new RenderableSprite();
 			_spritePool.push( sprite );
 			_spritePoolLength ++;
 			_spriteCount ++;
@@ -935,25 +972,25 @@ THREE.Projector = function () {
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.SpriteCanvasMaterial = function ( parameters ) {
+function SpriteCanvasMaterial( parameters ) {
 
-	THREE.Material.call( this );
+	Material.call( this );
 
 	this.type = "SpriteCanvasMaterial";
 
-	this.color = new THREE.Color( 0xffffff );
+	this.color = new Color( 0xffffff );
 	this.program = function ( context, color ) {};
 
 	this.setValues( parameters );
 
 };
 
-THREE.SpriteCanvasMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.SpriteCanvasMaterial.prototype.constructor = THREE.SpriteCanvasMaterial;
+SpriteCanvasMaterial.prototype = Object.create( Material.prototype );
+SpriteCanvasMaterial.prototype.constructor = SpriteCanvasMaterial;
 
-THREE.SpriteCanvasMaterial.prototype.clone = function () {
+SpriteCanvasMaterial.prototype.clone = function () {
 
-	var material = new THREE.SpriteCanvasMaterial();
+	var material = new SpriteCanvasMaterial();
 
 	material.copy( this );
 	material.color.copy( this.color );
@@ -965,15 +1002,15 @@ THREE.SpriteCanvasMaterial.prototype.clone = function () {
 
 //
 
-THREE.CanvasRenderer = function ( parameters ) {
+function CanvasRenderer( parameters ) {
 
-	console.log( 'THREE.CanvasRenderer', THREE.REVISION );
+	console.log( 'CanvasRenderer', REVISION );
 
 	parameters = parameters || {};
 
 	var _this = this,
 	_renderData, _elements, _lights,
-	_projector = new THREE.Projector(),
+	_projector = new Projector(),
 
 	_canvas = parameters.canvas !== undefined
 			 ? parameters.canvas
@@ -995,7 +1032,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 		alpha: parameters.alpha === true
 	} ),
 
-	_clearColor = new THREE.Color( 0x000000 ),
+	_clearColor = new Color( 0x000000 ),
 	_clearAlpha = parameters.alpha === true ? 0 : 1,
 
 	_contextGlobalAlpha = 1,
@@ -1010,40 +1047,40 @@ THREE.CanvasRenderer = function ( parameters ) {
 	_camera,
 
 	_v1, _v2, _v3, _v4,
-	_v5 = new THREE.RenderableVertex(),
-	_v6 = new THREE.RenderableVertex(),
+	_v5 = new RenderableVertex(),
+	_v6 = new RenderableVertex(),
 
 	_v1x, _v1y, _v2x, _v2y, _v3x, _v3y,
 	_v4x, _v4y, _v5x, _v5y, _v6x, _v6y,
 
-	_color = new THREE.Color(),
-	_color1 = new THREE.Color(),
-	_color2 = new THREE.Color(),
-	_color3 = new THREE.Color(),
-	_color4 = new THREE.Color(),
+	_color = new Color(),
+	_color1 = new Color(),
+	_color2 = new Color(),
+	_color3 = new Color(),
+	_color4 = new Color(),
 
-	_diffuseColor = new THREE.Color(),
-	_emissiveColor = new THREE.Color(),
+	_diffuseColor = new Color(),
+	_emissiveColor = new Color(),
 
-	_lightColor = new THREE.Color(),
+	_lightColor = new Color(),
 
 	_patterns = {},
 
 	_image, _uvs,
 	_uv1x, _uv1y, _uv2x, _uv2y, _uv3x, _uv3y,
 
-	_clipBox = new THREE.Box2(),
-	_clearBox = new THREE.Box2(),
-	_elemBox = new THREE.Box2(),
+	_clipBox = new Box2(),
+	_clearBox = new Box2(),
+	_elemBox = new Box2(),
 
-	_ambientLight = new THREE.Color(),
-	_directionalLights = new THREE.Color(),
-	_pointLights = new THREE.Color(),
+	_ambientLight = new Color(),
+	_directionalLights = new Color(),
+	_pointLights = new Color(),
 
-	_vector3 = new THREE.Vector3(), // Needed for PointLight
-	_centroid = new THREE.Vector3(),
-	_normal = new THREE.Vector3(),
-	_normalViewMatrix = new THREE.Matrix3();
+	_vector3 = new Vector3(), // Needed for PointLight
+	_centroid = new Vector3(),
+	_normal = new Vector3(),
+	_normalViewMatrix = new Matrix3();
 
 	/* TODO
 	_canvas.mozImageSmoothingEnabled = false;
@@ -1169,7 +1206,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 	this.setClearColorHex = function ( hex, alpha ) {
 
-		console.warn( 'THREE.CanvasRenderer: .setClearColorHex() is being removed. Use .setClearColor() instead.' );
+		console.warn( 'CanvasRenderer: .setClearColorHex() is being removed. Use .setClearColor() instead.' );
 		this.setClearColor( hex, alpha );
 
 	};
@@ -1217,7 +1254,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 			if ( _clearAlpha > 0 ) {
 
-				setBlending( THREE.NormalBlending );
+				setBlending( NormalBlending );
 				setOpacity( 1 );
 
 				setFillStyle( 'rgba(' + Math.floor( _clearColor.r * 255 ) + ',' + Math.floor( _clearColor.g * 255 ) + ',' + Math.floor( _clearColor.b * 255 ) + ',' + _clearAlpha + ')' );
@@ -1245,9 +1282,9 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 	this.render = function ( scene, camera ) {
 
-		if ( camera instanceof THREE.Camera === false ) {
+		if ( camera instanceof Camera === false ) {
 
-			console.error( 'THREE.CanvasRenderer.render: camera is not an instance of THREE.Camera.' );
+			console.error( 'CanvasRenderer.render: camera is not an instance of Camera.' );
 			return;
 
 		}
@@ -1284,14 +1321,14 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 			_elemBox.makeEmpty();
 
-			if ( element instanceof THREE.RenderableSprite ) {
+			if ( element instanceof RenderableSprite ) {
 
 				_v1 = element;
 				_v1.x *= _canvasWidthHalf; _v1.y *= _canvasHeightHalf;
 
 				renderSprite( _v1, element, material );
 
-			} else if ( element instanceof THREE.RenderableLine ) {
+			} else if ( element instanceof RenderableLine ) {
 
 				_v1 = element.v1; _v2 = element.v2;
 
@@ -1309,7 +1346,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 				}
 
-			} else if ( element instanceof THREE.RenderableFace ) {
+			} else if ( element instanceof RenderableFace ) {
 
 				_v1 = element.v1; _v2 = element.v2; _v3 = element.v3;
 
@@ -1376,17 +1413,17 @@ THREE.CanvasRenderer = function ( parameters ) {
 			var light = _lights[ l ];
 			var lightColor = light.color;
 
-			if ( light instanceof THREE.AmbientLight ) {
+			if ( light instanceof AmbientLight ) {
 
 				_ambientLight.add( lightColor );
 
-			} else if ( light instanceof THREE.DirectionalLight ) {
+			} else if ( light instanceof DirectionalLight ) {
 
 				// for sprites
 
 				_directionalLights.add( lightColor );
 
-			} else if ( light instanceof THREE.PointLight ) {
+			} else if ( light instanceof PointLight ) {
 
 				// for sprites
 
@@ -1406,7 +1443,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 			_lightColor.copy( light.color );
 
-			if ( light instanceof THREE.DirectionalLight ) {
+			if ( light instanceof DirectionalLight ) {
 
 				var lightPosition = _vector3.setFromMatrixPosition( light.matrixWorld ).normalize();
 
@@ -1418,7 +1455,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 				color.add( _lightColor.multiplyScalar( amount ) );
 
-			} else if ( light instanceof THREE.PointLight ) {
+			} else if ( light instanceof PointLight ) {
 
 				var lightPosition = _vector3.setFromMatrixPosition( light.matrixWorld );
 
@@ -1452,7 +1489,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 		_elemBox.min.set( v1.x - dist, v1.y - dist );
 		_elemBox.max.set( v1.x + dist, v1.y + dist );
 
-		if ( material instanceof THREE.SpriteMaterial ) {
+		if ( material instanceof SpriteMaterial ) {
 
 			var texture = material.map;
 
@@ -1508,7 +1545,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 			}
 
-		} else if ( material instanceof THREE.SpriteCanvasMaterial ) {
+		} else if ( material instanceof SpriteCanvasMaterial ) {
 
 			setStrokeStyle( material.color.getStyle() );
 			setFillStyle( material.color.getStyle() );
@@ -1545,13 +1582,13 @@ THREE.CanvasRenderer = function ( parameters ) {
 		_context.moveTo( v1.positionScreen.x, v1.positionScreen.y );
 		_context.lineTo( v2.positionScreen.x, v2.positionScreen.y );
 
-		if ( material instanceof THREE.LineBasicMaterial ) {
+		if ( material instanceof LineBasicMaterial ) {
 
 			setLineWidth( material.linewidth );
 			setLineCap( material.linecap );
 			setLineJoin( material.linejoin );
 
-			if ( material.vertexColors !== THREE.VertexColors ) {
+			if ( material.vertexColors !== VertexColors ) {
 
 				setStrokeStyle( material.color.getStyle() );
 
@@ -1592,7 +1629,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 			_context.stroke();
 			_elemBox.expandByScalar( material.linewidth * 2 );
 
-		} else if ( material instanceof THREE.LineDashedMaterial ) {
+		} else if ( material instanceof LineDashedMaterial ) {
 
 			setLineWidth( material.linewidth );
 			setLineCap( material.linecap );
@@ -1624,12 +1661,12 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 		drawTriangle( _v1x, _v1y, _v2x, _v2y, _v3x, _v3y );
 
-		if ( ( material instanceof THREE.MeshLambertMaterial || material instanceof THREE.MeshPhongMaterial ) && material.map === null ) {
+		if ( ( material instanceof MeshLambertMaterial || material instanceof MeshPhongMaterial ) && material.map === null ) {
 
 			_diffuseColor.copy( material.color );
 			_emissiveColor.copy( material.emissive );
 
-			if ( material.vertexColors === THREE.FaceColors ) {
+			if ( material.vertexColors === FaceColors ) {
 
 				_diffuseColor.multiply( element.color );
 
@@ -1647,15 +1684,15 @@ THREE.CanvasRenderer = function ( parameters ) {
 				 ? strokePath( _color, material.wireframeLinewidth, material.wireframeLinecap, material.wireframeLinejoin )
 				 : fillPath( _color );
 
-		} else if ( material instanceof THREE.MeshBasicMaterial ||
-				    material instanceof THREE.MeshLambertMaterial ||
-				    material instanceof THREE.MeshPhongMaterial ) {
+		} else if ( material instanceof MeshBasicMaterial ||
+				    material instanceof MeshLambertMaterial ||
+				    material instanceof MeshPhongMaterial ) {
 
 			if ( material.map !== null ) {
 
 				var mapping = material.map.mapping;
 
-				if ( mapping === THREE.UVMapping ) {
+				if ( mapping === UVMapping ) {
 
 					_uvs = element.uvs;
 					patternPath( _v1x, _v1y, _v2x, _v2y, _v3x, _v3y, _uvs[ uv1 ].x, _uvs[ uv1 ].y, _uvs[ uv2 ].x, _uvs[ uv2 ].y, _uvs[ uv3 ].x, _uvs[ uv3 ].y, material.map );
@@ -1664,7 +1701,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 			} else if ( material.envMap !== null ) {
 
-				if ( material.envMap.mapping === THREE.SphericalReflectionMapping ) {
+				if ( material.envMap.mapping === SphericalReflectionMapping ) {
 
 					_normal.copy( element.vertexNormalsModel[ uv1 ] ).applyMatrix3( _normalViewMatrix );
 					_uv1x = 0.5 * _normal.x + 0.5;
@@ -1686,7 +1723,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 				_color.copy( material.color );
 
-				if ( material.vertexColors === THREE.FaceColors ) {
+				if ( material.vertexColors === FaceColors ) {
 
 					_color.multiply( element.color );
 
@@ -1698,7 +1735,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 			}
 
-		} else if ( material instanceof THREE.MeshNormalMaterial ) {
+		} else if ( material instanceof MeshNormalMaterial ) {
 
 			_normal.copy( element.normalModel ).applyMatrix3( _normalViewMatrix );
 
@@ -1755,8 +1792,8 @@ THREE.CanvasRenderer = function ( parameters ) {
 	function textureToPattern( texture ) {
 
 		if ( texture.version === 0 ||
-			texture instanceof THREE.CompressedTexture ||
-			texture instanceof THREE.DataTexture ) {
+			texture instanceof CompressedTexture ||
+			texture instanceof DataTexture ) {
 
 			return {
 				canvas: undefined,
@@ -1784,8 +1821,8 @@ THREE.CanvasRenderer = function ( parameters ) {
 		context.setTransform( 1, 0, 0, - 1, 0, image.height );
 		context.drawImage( image, 0, 0 );
 
-		var repeatX = texture.wrapS === THREE.RepeatWrapping;
-		var repeatY = texture.wrapT === THREE.RepeatWrapping;
+		var repeatX = texture.wrapS === RepeatWrapping;
+		var repeatY = texture.wrapT === RepeatWrapping;
 
 		var repeat = 'no-repeat';
 
@@ -1954,19 +1991,19 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 		if ( _contextGlobalCompositeOperation !== value ) {
 
-			if ( value === THREE.NormalBlending ) {
+			if ( value === NormalBlending ) {
 
 				_context.globalCompositeOperation = 'source-over';
 
-			} else if ( value === THREE.AdditiveBlending ) {
+			} else if ( value === AdditiveBlending ) {
 
 				_context.globalCompositeOperation = 'lighter';
 
-			} else if ( value === THREE.SubtractiveBlending ) {
+			} else if ( value === SubtractiveBlending ) {
 
 				_context.globalCompositeOperation = 'darker';
 
-			} else if ( value === THREE.MultiplyBlending ) {
+			} else if ( value === MultiplyBlending ) {
 
 				_context.globalCompositeOperation = 'multiply';
 
@@ -2050,4 +2087,4 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 };
 
-module.exports = THREE;
+export { canvasRenderer };
