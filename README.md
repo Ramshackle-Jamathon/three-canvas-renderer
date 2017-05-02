@@ -8,7 +8,7 @@ $ npm install three-canvas-renderer
 ```
 
 ## Example
-_works with THREE >=0.76.0_
+_works with THREE >=0.84.0_
 
 ```javascript
 var THREE = require("three-canvas-renderer");
